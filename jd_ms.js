@@ -22,7 +22,6 @@ cron "1 7 * * *" script-path=https://raw.githubusercontent.com/shylocks/Loon/mai
 京东秒秒币 = type=cron,script-path=https://raw.githubusercontent.com/shylocks/Loon/main/jd_ms.js, cronexpr="1 7 * * *", timeout=200, enable=true
  */
 const $ = new Env('京东秒秒币');
-
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -61,7 +60,6 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/`, {"open-url": "https://bean.m.jd.com/"});
-
         if ($.isNode()) {
           await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
         } else {
@@ -79,7 +77,6 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
   .finally(() => {
     $.done();
   })
-
 async function jdMs() {
   $.score = 0
   await getActInfo()
@@ -91,7 +88,6 @@ async function jdMs() {
   await getUserInfo(false)
   await showMsg()
 }
-
 function getActInfo() {
   return new Promise(resolve => {
     $.post(taskPostUrl('assignmentList', {}, 'appid=jwsp'), (err, resp, data) => {
@@ -210,7 +206,6 @@ function getTaskList() {
     })
   })
 }
-
 function doTask(body) {
   body = {...body, "encryptProjectId": $.encryptProjectId, "sourceCode": "wh5", "ext": {}}
   return new Promise(resolve => {
@@ -242,8 +237,6 @@ function showMsg() {
     resolve()
   })
 }
-
-
 function taskPostUrl(function_id, body = {}, extra = '', function_id2) {
   let url = `${JD_API_HOST}`;
   if (function_id2) {
@@ -261,7 +254,6 @@ function taskPostUrl(function_id, body = {}, extra = '', function_id2) {
     }
   }
 }
-
 function TotalBean() {
   return new Promise(async resolve => {
     const options = {
@@ -302,7 +294,6 @@ function TotalBean() {
     })
   })
 }
-
 function safeGet(data) {
   try {
     if (typeof JSON.parse(data) == "object") {
@@ -314,7 +305,6 @@ function safeGet(data) {
     return false;
   }
 }
-
 function jsonParse(str) {
   if (typeof str == "string") {
     try {
