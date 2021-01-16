@@ -2,8 +2,8 @@ name: 京东秒杀秒秒币
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '15 23 * * *'
+   schedule:
+     - cron: '15 23 * * *'
   watch:
     types: started
   repository_dispatch:
@@ -13,11 +13,14 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
     steps:
-      - name: Checkout github_lxk0301_jd_scripts
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Checkout github_liuning0307_lxk0301
         uses: actions/checkout@v2
         with:
           repository: liuning0307/lxk0301
           ref: main
+          path: scripts
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -30,17 +33,21 @@ jobs:
           path: node_modules
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }}
       - name: npm install
-        run: npm install
+        run: |
+          cd scripts
+          npm install
       - name: '运行 【京东秒杀秒秒币】'
-        run: node jd_ms.js
+        run: |
+          cd scripts
+          node jd_ms.js
         env:
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH }}
-          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-          TG_USER_ID: ${{ secrets.TG_USER_ID }}          
           BARK_SOUND: ${{ secrets.BARK_SOUND }}
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_USER_ID: ${{ secrets.TG_USER_ID }}
           DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
           DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
           IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
